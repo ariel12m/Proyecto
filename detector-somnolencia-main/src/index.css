@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  @apply text-gray-800 overflow-hidden;
+  background: #f8fafc;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.input-professional {
+  @apply w-full border border-gray-300 text-gray-800 rounded-lg p-3 bg-white;
+  transition: 0.3s;
+}
+
+.input-professional::placeholder {
+  @apply text-gray-400;
+}
+
+.input-professional:focus {
+  @apply border-blue-500 ring-2 ring-blue-200;
+  outline: none;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition shadow-sm;
+}
+
+.btn-primary:hover {
+  @apply shadow-md;
+}
+
+.btn-secondary {
+  @apply bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg font-medium transition;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+}
+
+.stat-card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5;
+  transition: 0.3s;
+}
+
+.stat-card:hover {
+  @apply shadow-md;
+}
+
+.sidebar {
+  @apply bg-white border-r border-gray-200 min-h-screen;
+}
+
+.nav-item {
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition cursor-pointer;
+}
+
+.nav-item.active {
+  @apply bg-blue-50 text-blue-600 font-medium;
+}
