@@ -11,8 +11,8 @@
 #include <math.h>
 
 // ---------------- WIFI ----------------
-char ssid[] = "Red_Software";
-char pass[] = "S0ft2026t$c.";
+char ssid[] = "Pinguinos_de_Madagascar";
+char pass[] = "Paligienco.2023";
 char auth[] = BLYNK_AUTH_TOKEN;
 
 BlynkTimer timer;
@@ -21,7 +21,7 @@ BlynkTimer timer;
 MPU6050 mpu;
 MAX30105 particleSensor;
 
-#define BUZZER 25
+const int BUZZER = 25;
 
 // MPU6050
 int16_t ax, ay, az, gx, gy, gz;
@@ -194,53 +194,37 @@ void leerSensores() {
 void setup() {
 
   Serial.begin(115200);
-
   Wire.begin(26, 27);
-
   pinMode(BUZZER, OUTPUT);
 
   // iniciar MPU6050
   mpu.initialize();
-
   if (!mpu.testConnection()) {
-
     Serial.println("ERROR: MPU6050 no conectado");
-
     while (1);
   }
 
   // iniciar MAX30102
   if (!particleSensor.begin(Wire)) {
-
     Serial.println("ERROR: MAX30102 no encontrado");
-
     while (1);
   }
-
   particleSensor.setup(60, 4, 2, 100, 411, 4096);
 
   // conectar WiFi
   WiFi.begin(ssid, pass);
-
   Serial.print("Conectando WiFi");
-
   while (WiFi.status() != WL_CONNECTED) {
-
     delay(500);
     Serial.print(".");
   }
-
   Serial.println("\nWiFi conectado");
 
   // conectar Blynk
   Blynk.config(auth);
-
   if (Blynk.connect(5000)) {
-
     Serial.println("Blynk conectado");
-
   } else {
-
     Serial.println("No se pudo conectar a Blynk");
   }
 
@@ -250,8 +234,6 @@ void setup() {
 
 // ---------------- LOOP ----------------
 void loop() {
-
   Blynk.run();
-
   timer.run();
 }
