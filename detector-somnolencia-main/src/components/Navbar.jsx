@@ -21,10 +21,8 @@ export default function Navbar() {
         <Link className="hover:text-cyan-300 hover:glow transition" to="/events-today">Eventos Hoy</Link>
         <Link className="hover:text-cyan-300 hover:glow transition" to="/history">Historial</Link>
         <Link className="hover:text-pink-300 hover:glow transition" to="/profile">Perfil</Link>
-
-        {}
         {
-        <button 
+        <button
           onClick={handleLogout}
           className="bg-red-600/80 px-3 py-1 rounded-md hover:bg-red-700 transition text-white"
         >
