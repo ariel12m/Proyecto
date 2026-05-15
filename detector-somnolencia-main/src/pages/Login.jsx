@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/api";
+import  api  from "../api/api";
+import apiService from "../api/apiService.ts";
+import { login } from "../api/endpoints.ts";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,8 +15,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/login", { email, password });
-      const { token, user } = res.data
+      const res = await apiService.login(login, {email, password});
+      const { token, user } = res
       localStorage.setItem("token", token);
       localStorage.setItem("Id", user.id)
       navigate("/dashboard");
@@ -123,6 +125,7 @@ export default function Login() {
 
               <button
                 type="submit"
+                onClick={handleSubmit}
                 disabled={loading}
                 className={`w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
               >

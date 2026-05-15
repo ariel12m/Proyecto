@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/api";
+//import { api } from "../api/api";
+import apiService from "../api/apiService.ts";
+import {register} from "../api/endpoints.ts";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -33,7 +35,8 @@ export default function Register() {
     }
 
     try {
-      await api.post("/auth/register", form);
+      await apiService.create(register, form);
+      //await api.post("/auth/register", form);
       navigate("/login");
     } catch (err) {
       const msg = err.response?.data?.message || "Error al registrar. Verifica tu información.";
@@ -91,8 +94,7 @@ export default function Register() {
             </div>
           </div>
         </div>
-
-        <p className="text-blue-200 text-sm">© 2024 Sistema de Detección de Somnolencia</p>
+        <p className="text-blue-200 text-sm">©{new Date().getFullYear()} Sistema de Detección de Somnolencia</p>
       </div>
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
