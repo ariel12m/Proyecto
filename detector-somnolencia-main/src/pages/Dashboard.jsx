@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import apiService from "../api/apiService.ts";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/api";
+//import { api } from "../api/api";
+import {event, users} from "../api/endpoints.ts";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -33,20 +34,18 @@ export default function Dashboard() {
   async function loadData() {
     try {
       setIsUpdating(true);
-      
-      const res = await axios.get("http://localhost:3000/event");
-      setEvents(res.data);
+      const res = await apiService.getAll(event);
+      //const res = await axios.get("http://localhost:3000/event");
+      setEvents(res);
 
       const token = localStorage.getItem("token");
       const userId = Number(localStorage.getItem("Id"));
       if (token && token !== "guest-token") {
-        const userRes = await api.get(`user/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(userRes.data);
+        const userRes = await apiService.getById(users, userId);
+        console.log(userRes);
+        setUser(userRes);
       }
-
-      calculateSleepData(res.data);
+      calculateSleepData(res);
     } catch (error) {
       console.error("Error cargando datos:", error);
       setUser({
@@ -140,12 +139,9 @@ export default function Dashboard() {
   async function saveProfile() {
     setSavingProfile(true);
     try {
-      const token = localStorage.getItem("token");
       const userId = Number(localStorage.getItem("Id"));
       
-      await api.patch(`user/${userId}`, editForm, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await apiService.update(users, userId.toString(), editForm);
 
       setUser(prev => ({
         ...prev,
@@ -165,13 +161,14 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    loadData();
-    
+    loadData().then();
+
     const interval = setInterval(() => {
       loadData();
     }, 5000);
 
-    return () => clearInterval(interval);
+
+    clearInterval(interval);
   }, []);
 
   const todayEvents = events.filter(event => {
@@ -204,10 +201,10 @@ export default function Dashboard() {
   const inputBg = isDark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-800";
 
   const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" },
+    { id: "dashboard", label: "Dashboard", icon: "" },
     { id: "events", label: "Eventos", icon: "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" },
     { id: "history", label: "Historial", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" },
-    { id: "profile", label: "Perfil", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
+    // { id: "profile", label: "Perfil", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
   ];
 
   return (
@@ -223,7 +220,7 @@ export default function Dashboard() {
           <h1 className={`text-lg font-bold ${textPrimary}`}>Somnolencia</h1>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setDarkMode(!darkMode)} className={`p-2 rounded-lg ${navItemHover}`}>
+          <button onClick={() => setDarkMode(!darkMode)} className={`p-2 rounded-lg display-flex ${navItemHover}`}>
             {isDark ? (
               <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -350,9 +347,12 @@ export default function Dashboard() {
               ))}
             </ul>
           </nav>
-
           <div className={`p-4 border-t ${borderColor}`}>
-            <div className={`flex items-center gap-3 mb-4 ${sidebarCollapsed ? "justify-center" : ""}`}>
+
+            <button className={`flex items-center gap-3 mb-4 ${sidebarCollapsed ? "justify-center" : ""}`}
+
+              onClick={() => { setActiveTab("profile"); setMobileMenuOpen(false); }}
+            >
               {user?.photo ? (
                 <img src={user.photo} alt="Foto" className={`w-10 h-10 rounded-full object-cover flex-shrink-0 ${isDark ? "border border-gray-600" : "border-2 border-white"}`} />
               ) : (
@@ -366,7 +366,7 @@ export default function Dashboard() {
                   <p className={`text-xs ${textSecondary} truncate`}>{user?.email || "correo@ejemplo.com"}</p>
                 </div>
               )}
-            </div>
+            </button>
             <button
               onClick={logout}
               className={`w-full flex items-center justify-center gap-2 px-4 py-2 ${isDark ? "text-red-400 hover:bg-red-900/30" : "text-red-600 hover:bg-red-50"} rounded-lg transition`}
