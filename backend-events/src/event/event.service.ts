@@ -17,9 +17,20 @@ export class EventService {
   }
 
   findOne(id: number) {
-    return this.eventService.event.findUnique({
-      where: {id}
-    })
+    return this.prisma.event.findUnique({
+      where: { id },
+    });
+  }
+
+  findLatest(events: number) {
+    return this.prisma.event.findMany({
+      take: events,
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  countEvents() {
+    return this.prisma.event.count();
   }
 
   update(id: number, updateEventDto: UpdateEventDto) {

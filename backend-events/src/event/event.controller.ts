@@ -37,6 +37,18 @@ export class EventController {
     return this.eventService.findAll();
   }
 
+  @Get('last/:events')
+  findLatest(@Param('events') events: number) {
+    return this.eventService.findLatest(events);
+  }
+
+  @Get('count')
+  countEvents(){
+    return this.eventService.countEvents();
+  }
+
+  @Get()
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventService.findOne(+id);
