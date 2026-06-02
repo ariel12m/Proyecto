@@ -5,15 +5,15 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class EventService {
-  constructor(private readonly eventService: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
   create(createEventDto: CreateEventDto, userId: number) {
-    return this.eventService.event.create({
-      data: { ...createEventDto, userId }
-    })
+    return this.prisma.event.create({
+      data: { ...createEventDto, userId },
+    });
   }
 
   findAll() {
-    return this.eventService.event.findMany();
+    return this.prisma.event.findMany();
   }
 
   findOne(id: number) {
@@ -23,21 +23,21 @@ export class EventService {
   }
 
   update(id: number, updateEventDto: UpdateEventDto) {
-    return this.eventService.event.update({
-      where: {id},
-      data: {...updateEventDto}
-    })
+    return this.prisma.event.update({
+      where: { id },
+      data: { ...updateEventDto },
+    });
   }
 
   remove(id: number) {
-    return this.eventService.event.delete({
-      where: {id}
-    })
+    return this.prisma.event.delete({
+      where: { id },
+    });
   }
 
   async createFromESP32(eventDto: any, sensorData: any) {
     try {
-      const event = await this.eventService.event.create({
+      const event = await this.prisma.event.create({
         data: {
           title: eventDto.title,
           description: eventDto.description,
