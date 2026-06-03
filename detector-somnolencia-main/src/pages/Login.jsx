@@ -75,7 +75,7 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="text-blue-200 text-sm">© 2024 Sistema de Detección de Somnolencia</p>
+        <p className="text-blue-200 text-sm">{`© ${new Date().getFullYear()} ° Sistema de Detección de Somnolencia`}</p>
       </div>
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
