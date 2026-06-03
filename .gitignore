@@ -109,7 +109,6 @@ dist
 
 # vuepress v2.x temp and cache directory
 .temp
-.cache
 
 # vitepress build output
 **/.vitepress/dist
@@ -142,3 +141,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# JetBrains IDE
+.idea
