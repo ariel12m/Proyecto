@@ -13,25 +13,23 @@ export class UserController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
-
-  
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
-/*   @Get(':email')
-  findByEmail(@Param('email') email: string) {
-    return this.userService.findOne(+email)
-  } */
+  /*   @Get(':email')
+    findByEmail(@Param('email') email: string) {
+      return this.userService.findOne(+email)
+    } */
 
-  
- @Get(':id')
-findOne(@Param('id') id: string) {
-  const userId = Number(id);
-  if (isNaN(userId)) throw new BadRequestException('El id debe ser un número');
-  return this.userService.findOne(userId);
-}
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    const userId = Number(id);
+    if (isNaN(userId)) throw new BadRequestException('El id debe ser un número');
+    return this.userService.findOne(userId);
+  }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
