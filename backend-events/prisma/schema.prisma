@@ -20,12 +20,12 @@ model User {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String?
   date        DateTime?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   sensorData  Json?
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
