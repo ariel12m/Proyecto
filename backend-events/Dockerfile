@@ -6,6 +6,7 @@ RUN bun install
 
 COPY . .
 
+ENV DATABASE_URL="postgresql://user:password@db.manuel:5432/mydb"
 RUN bunx prisma generate
 RUN bun run build
 
